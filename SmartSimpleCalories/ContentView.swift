@@ -17,7 +17,7 @@ struct ContentView: View {
                 Image(systemName: "gear")
                 Text("Settings")
             }
-
+            
             NavigationView {
                 HomeView()
                     .navigationBarTitle("Home")
@@ -25,7 +25,7 @@ struct ContentView: View {
                 Image(systemName: "house")
                 Text("Home")
             }
-
+            
             NavigationView {
                 GraphView()
                     .navigationBarTitle("Graph")
@@ -37,23 +37,10 @@ struct ContentView: View {
     }
 }
 
-struct SettingsView: View {
-    var body: some View {
-        Text("Settings Screen")
-    }
-}
 
-struct HomeView: View {
-    var body: some View {
-        Text("Home Screen")
-    }
-}
 
-struct GraphView: View {
-    var body: some View {
-        Text("Graph Screen")
-    }
-}
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
