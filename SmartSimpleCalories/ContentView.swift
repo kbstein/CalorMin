@@ -9,13 +9,49 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        TabView {
+            NavigationView {
+                SettingsView()
+                    .navigationBarTitle("Settings")
+            }.tabItem {
+                Image(systemName: "gear")
+                Text("Settings")
+            }
+
+            NavigationView {
+                HomeView()
+                    .navigationBarTitle("Home")
+            }.tabItem {
+                Image(systemName: "house")
+                Text("Home")
+            }
+
+            NavigationView {
+                GraphView()
+                    .navigationBarTitle("Graph")
+            }.tabItem {
+                Image(systemName: "chart.bar")
+                Text("Graph")
+            }
         }
-        .padding()
+    }
+}
+
+struct SettingsView: View {
+    var body: some View {
+        Text("Settings Screen")
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        Text("Home Screen")
+    }
+}
+
+struct GraphView: View {
+    var body: some View {
+        Text("Graph Screen")
     }
 }
 
