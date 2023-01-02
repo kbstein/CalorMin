@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct HomeView: View {
+    enum FocusField: Hashable {
+      case field
+    }
+    @FocusState private var focusedField: FocusField?
     @State private var text: String = ""
     @State var numberOfCalories = 2500
     @State private var showDayHistoryView: Bool = false
     @State var textBelowCalorieCount = "Calories Left"
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
+
+
 
     var body: some View {
         VStack {
@@ -36,6 +42,7 @@ struct HomeView: View {
                 .fontWeight(.semibold)
             Spacer()
             Button(action: {
+                self.focusedField = .field
                 self.showNumberKeyboard = true
             }) {
                 Image(systemName: "plus")
@@ -50,19 +57,49 @@ struct HomeView: View {
             .sheet(isPresented: $showNumberKeyboard) {
                 VStack {
                     VStack {
-                        TextField("Enter number of calories", text: self.$enteredCalories, onCommit: {
-                            // Add the entered calories to the numberOfCalories
-                            self.numberOfCalories += Int(self.enteredCalories) ?? 0
-                            self.showNumberKeyboard = false
-                        })
+                        HStack {
+                            Button(action: {
+                                self.showNumberKeyboard = false
+                                enteredCalories = ""
+                            }) {
+                                Image(systemName: "x.square")
+                                    .frame(width: 50, height: 50)
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.red)
+                                    .cornerRadius(18.0)
+                            }
+                            TextField("0", text: self.$enteredCalories, onCommit: {
+                                self.numberOfCalories += Int(self.enteredCalories) ?? 0
+                            })
+                            .focused($focusedField, equals: .field)
+                            .keyboardType(.numberPad)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .background(Color.green)
+                            Button(action: {
+                                numberOfCalories -= Int(enteredCalories) ?? 0
+                                self.showNumberKeyboard = false
+                                enteredCalories = ""
+                            }) {
+                                Image(systemName: "checkmark.square")
+                                    .frame(width: 50, height: 50)
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.green)
+                                    .cornerRadius(18.0)
+                            }
+                        }
                     }
                     .frame(width: 200, height: 200)
                     .background(Color.blue)
-                    .keyboardType(.numberPad)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.black)
             }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
                 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
