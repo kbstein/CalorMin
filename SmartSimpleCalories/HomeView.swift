@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct HomeView: View {
+    var deviceWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
+
+    var deviceHeight: CGFloat {
+        UIScreen.main.bounds.height
+    }
     enum FocusField: Hashable {
       case field
     }
@@ -21,9 +28,13 @@ struct HomeView: View {
 
 
 
+
     var body: some View {
         ZStack {
             VStack {
+                Text(textBelowCalorieCount)
+                    .font(.title2)
+                    .fontWeight(.semibold)
                 Button(action:  {
                     self.showDayHistoryView = true
                 }) {
@@ -31,16 +42,21 @@ struct HomeView: View {
                         .foregroundColor(.black)
                         .font(.title)
                         .fontWeight(.bold)
-                        .frame(width: 250, height: 75)
+                        .frame(width: (deviceWidth * 0.80), height: 75)
                     
                         .background(Color.gray)
                         .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
                 }.sheet(isPresented: $showDayHistoryView) {
                     DayHistoryView()
                 }
-                Text(textBelowCalorieCount)
+                Spacer()
+                Text("Quick Add")
                     .font(.title2)
                     .fontWeight(.semibold)
+                    .padding()
+                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 500)
+                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 100)
+                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 50)
                 Spacer()
                 Button(action: {
                     self.showNumberKeyboard = true
@@ -48,7 +64,7 @@ struct HomeView: View {
                     Image(systemName: "plus")
                         .frame(width: 50, height: 50)
                         .font(.title2)
-                        .fontWeight(.semibold)
+                        .fontWeight(.bold)
                         .foregroundColor(Color.black)
                 }
                 .background(Color.gray)
@@ -56,7 +72,6 @@ struct HomeView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.brown)
             if (showNumberKeyboard) {
                 VisualEffectView(effect: UIBlurEffect(style: .dark)).edgesIgnoringSafeArea(.all)
                 VStack {
@@ -80,10 +95,10 @@ struct HomeView: View {
                             self.focusedField = .field
                         }
                         .focused($focusedField, equals: .field)
+                        .multilineTextAlignment(.center)
                         .keyboardType(.numberPad)
                         .font(.title)
                         .fontWeight(.semibold)
-                        .background(Color.gray)
                         Button(action: {
                             numberOfCalories -= Int(enteredCalories) ?? 0
                             self.showNumberKeyboard = false
@@ -99,10 +114,29 @@ struct HomeView: View {
                         }
                     }
                 }
-                .frame(width: 275, height: 200)
+                .frame(width: 225, height: 175)
                 .background(Color.white)
                 .cornerRadius(18.0)
             }
+        }
+    }
+}
+
+struct quickAddButton: View {
+    var deviceWidth: CGFloat
+    var calorieAmount: Int
+    
+    var body: some View {
+        Button {
+            
+        } label: {
+            Text("\(calorieAmount)")
+                .foregroundColor(.black)
+                .font(.title)
+                .fontWeight(.bold)
+                .frame(width: (deviceWidth * 0.80), height: 40)
+                .background(Color.gray)
+                .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
         }
     }
 }
