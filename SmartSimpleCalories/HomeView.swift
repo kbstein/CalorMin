@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    var healthDataManager: HealthDataManager
     var deviceWidth: CGFloat {
         UIScreen.main.bounds.width
     }
@@ -25,17 +26,25 @@ struct HomeView: View {
     @State var textBelowCalorieCount = "Calories Left"
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
+    @State private var calorieIntake: Double = 0
+
+
 
     var body: some View {
         ZStack {
             VStack {
-                Text(textBelowCalorieCount)
+                Text("\(textBelowCalorieCount)")
                     .font(.title2)
                     .fontWeight(.semibold)
+                    .onAppear {
+                        self.healthDataManager.fetchCalorieIntake { (result) in
+                          self.calorieIntake = result
+                        }
+                    }
                 Button(action:  {
                     self.showDayHistoryView = true
                 }) {
-                    Text("\(numberOfCalories)")
+                    Text("\(Int(calorieIntake))")
                         .foregroundColor(.black)
                         .font(.title)
                         .fontWeight(.bold)
@@ -98,9 +107,14 @@ struct HomeView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                         Button(action: {
-                            numberOfCalories -= Int(enteredCalories) ?? 0
                             self.showNumberKeyboard = false
+                            healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
                             enteredCalories = ""
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self.healthDataManager.fetchCalorieIntake { (result) in
+                                  self.calorieIntake = result
+                                }
+                            }
                         }) {
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)
@@ -116,6 +130,7 @@ struct HomeView: View {
                 .background(Color.white)
                 .cornerRadius(18.0)
             }
+            
         }
     }
 }
@@ -155,6 +170,8 @@ struct DayHistoryView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(healthDataManager: HealthDataManager())
     }
 }
+
+

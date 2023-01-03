@@ -17,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F82FED9F2964881A00787477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F82FEDA0296489AC00787477 /* SmartSimpleCalories.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartSimpleCalories.entitlements; sourceTree = "<group>"; };
 		F8E3EF502961F5C9000D11AB /* SmartSimpleCalories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartSimpleCalories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E3EF532961F5C9000D11AB /* SmartSimpleCaloriesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartSimpleCaloriesApp.swift; sourceTree = "<group>"; };
 		F8E3EF552961F5C9000D11AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,8 @@
 				F8E3EF632961FC1A000D11AB /* SettingsView.swift */,
 				F8E3EF672961FC37000D11AB /* GraphView.swift */,
 				F8E3EF572961F5CA000D11AB /* Assets.xcassets */,
+				F82FED9F2964881A00787477 /* Info.plist */,
+				F82FEDA0296489AC00787477 /* SmartSimpleCalories.entitlements */,
 				F8E3EF592961F5CA000D11AB /* Preview Content */,
 			);
 			path = SmartSimpleCalories;
@@ -276,12 +280,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SmartSimpleCalories/SmartSimpleCalories.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SmartSimpleCalories/Preview Content\"";
 				DEVELOPMENT_TEAM = H3T267Z622;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartSimpleCalories/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,12 +311,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SmartSimpleCalories/SmartSimpleCalories.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SmartSimpleCalories/Preview Content\"";
 				DEVELOPMENT_TEAM = H3T267Z622;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartSimpleCalories/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
