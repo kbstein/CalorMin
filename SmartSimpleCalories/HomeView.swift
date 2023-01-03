@@ -26,9 +26,6 @@ struct HomeView: View {
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
 
-
-
-
     var body: some View {
         ZStack {
             VStack {
@@ -53,17 +50,18 @@ struct HomeView: View {
                 Text("Quick Add")
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .padding()
                 quickAddButton(deviceWidth: deviceWidth, calorieAmount: 500)
+                    .padding(.bottom, 5.0)
                 quickAddButton(deviceWidth: deviceWidth, calorieAmount: 100)
+                    .padding(.bottom, 5.0)
                 quickAddButton(deviceWidth: deviceWidth, calorieAmount: 50)
                 Spacer()
                 Button(action: {
                     self.showNumberKeyboard = true
                 }) {
                     Image(systemName: "plus")
-                        .frame(width: 50, height: 50)
-                        .font(.title2)
+                        .frame(width: (deviceWidth * 0.15), height: (deviceWidth * 0.15))
+                        .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(Color.black)
                 }
@@ -134,7 +132,7 @@ struct quickAddButton: View {
                 .foregroundColor(.black)
                 .font(.title)
                 .fontWeight(.bold)
-                .frame(width: (deviceWidth * 0.80), height: 40)
+                .frame(width: (deviceWidth * 0.80), height: 50)
                 .background(Color.gray)
                 .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
         }
