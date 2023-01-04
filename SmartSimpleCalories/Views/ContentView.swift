@@ -10,7 +10,8 @@ import HealthKit
 
 struct ContentView: View {
     let healthDataManager = HealthDataManager()
-    let viewModel = UserSettingsViewModel()
+    var viewModel = UserSettingsViewModel()
+
 
     var body: some View {
         TabView {

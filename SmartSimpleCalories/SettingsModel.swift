@@ -10,4 +10,5 @@ struct UserSettings: Codable, Identifiable {
     var id: UUID
     var calorieText: String
     var calorieGoal: Int
+    var caloriesRemaining: Bool
 }

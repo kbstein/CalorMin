@@ -16,7 +16,7 @@ class UserSettingsViewModel: ObservableObject {
             self.userSettings = userSettings
         } else {
             // If the user's settings are not found in UserDefaults, create a new userSettings struct with default values
-            self.userSettings = UserSettings(id: UUID(), calorieText: "Calories Eaten", calorieGoal: 2000)
+            self.userSettings = UserSettings(id: UUID(), calorieText: "Calories Eaten", calorieGoal: 2000, caloriesRemaining: false)
         }
     }
 

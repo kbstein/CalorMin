@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    let viewModel: UserSettingsViewModel
+    @ObservedObject var viewModel: UserSettingsViewModel
     var healthDataManager: HealthDataManager
     var deviceWidth: CGFloat {
         UIScreen.main.bounds.width
@@ -27,9 +27,6 @@ struct HomeView: View {
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
     @State private var calorieIntake: Double = 0
-    private let calorieConsumedText = "Calories Consumed"
-    private let calorieRemainingText = "Calories Remaining"
-
 
 
 
@@ -173,7 +170,7 @@ struct DayHistoryView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(healthDataManager: HealthDataManager())
+        HomeView(viewModel: UserSettingsViewModel(), healthDataManager: HealthDataManager())
     }
 }
 
