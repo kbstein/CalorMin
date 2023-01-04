@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    let userSettingsViewModel = UserSettingsViewModel()
     var healthDataManager: HealthDataManager
     var deviceWidth: CGFloat {
         UIScreen.main.bounds.width
@@ -23,7 +24,7 @@ struct HomeView: View {
     @State private var text: String = ""
     @State var numberOfCalories = 2500
     @State private var showDayHistoryView: Bool = false
-    @State var textBelowCalorieCount = "Calories Left"
+    @State var textBelowCalorieCount = "Calories Eaten"
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
     @State private var calorieIntake: Double = 0
@@ -115,7 +116,7 @@ struct HomeView: View {
                                   self.calorieIntake = result
                                 }
                             }
-                        }) {
+                        }) { 
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)
                                 .font(.title)

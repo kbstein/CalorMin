@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F82FEDA22964FDC000787477 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FEDA12964FDC000787477 /* ViewModel.swift */; };
+		F82FEDA42965C70C00787477 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FEDA32965C70C00787477 /* SettingsModel.swift */; };
 		F8E3EF542961F5C9000D11AB /* SmartSimpleCaloriesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3EF532961F5C9000D11AB /* SmartSimpleCaloriesApp.swift */; };
 		F8E3EF562961F5C9000D11AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E3EF552961F5C9000D11AB /* ContentView.swift */; };
 		F8E3EF582961F5CA000D11AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8E3EF572961F5CA000D11AB /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 /* Begin PBXFileReference section */
 		F82FED9F2964881A00787477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F82FEDA0296489AC00787477 /* SmartSimpleCalories.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartSimpleCalories.entitlements; sourceTree = "<group>"; };
+		F82FEDA12964FDC000787477 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		F82FEDA32965C70C00787477 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		F8E3EF502961F5C9000D11AB /* SmartSimpleCalories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartSimpleCalories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E3EF532961F5C9000D11AB /* SmartSimpleCaloriesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartSimpleCaloriesApp.swift; sourceTree = "<group>"; };
 		F8E3EF552961F5C9000D11AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,9 +65,11 @@
 			children = (
 				F8E3EF532961F5C9000D11AB /* SmartSimpleCaloriesApp.swift */,
 				F8E3EF552961F5C9000D11AB /* ContentView.swift */,
+				F82FEDA12964FDC000787477 /* ViewModel.swift */,
 				F8E3EF612961FC0F000D11AB /* HomeView.swift */,
 				F8E3EF632961FC1A000D11AB /* SettingsView.swift */,
 				F8E3EF672961FC37000D11AB /* GraphView.swift */,
+				F82FEDA32965C70C00787477 /* SettingsModel.swift */,
 				F8E3EF572961F5CA000D11AB /* Assets.xcassets */,
 				F82FED9F2964881A00787477 /* Info.plist */,
 				F82FEDA0296489AC00787477 /* SmartSimpleCalories.entitlements */,
@@ -154,6 +160,8 @@
 				F8E3EF622961FC0F000D11AB /* HomeView.swift in Sources */,
 				F8E3EF642961FC1A000D11AB /* SettingsView.swift in Sources */,
 				F8E3EF562961F5C9000D11AB /* ContentView.swift in Sources */,
+				F82FEDA22964FDC000787477 /* ViewModel.swift in Sources */,
+				F82FEDA42965C70C00787477 /* SettingsModel.swift in Sources */,
 				F8E3EF542961F5C9000D11AB /* SmartSimpleCaloriesApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
