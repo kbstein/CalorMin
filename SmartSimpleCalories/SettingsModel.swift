@@ -4,12 +4,10 @@
 //
 //  Created by Kyle Steinicke on 1/4/23.
 //
-
 import Foundation
-
 
 struct UserSettings: Codable, Identifiable {
     var id: UUID
-    var calorieCountText: String
+    var calorieText: String
     var calorieGoal: Int
 }

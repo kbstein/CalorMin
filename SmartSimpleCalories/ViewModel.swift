@@ -16,7 +16,7 @@ class UserSettingsViewModel: ObservableObject {
             self.userSettings = userSettings
         } else {
             // If the user's settings are not found in UserDefaults, create a new userSettings struct with default values
-            self.userSettings = UserSettings(id: UUID(), calorieCountText: "2000", calorieGoal: 2000)
+            self.userSettings = UserSettings(id: UUID(), calorieText: "Calories Eaten", calorieGoal: 2000)
         }
     }
 
@@ -25,6 +25,14 @@ class UserSettingsViewModel: ObservableObject {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(userSettings) {
             UserDefaults.standard.set(encoded, forKey: "userSettings")
+        }
+    }
+    
+    func toggleCalorieText() {
+        if userSettings.calorieText == "Calories Eaten" {
+            userSettings.calorieText = "Calories Remaining"
+        } else {
+            userSettings.calorieText = "Calories Eaten"
         }
     }
 }

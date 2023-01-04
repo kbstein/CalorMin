@@ -10,11 +10,12 @@ import HealthKit
 
 struct ContentView: View {
     let healthDataManager = HealthDataManager()
+    let viewModel = UserSettingsViewModel()
 
     var body: some View {
         TabView {
             NavigationView {
-                HomeView(healthDataManager: healthDataManager)
+                HomeView(viewModel: viewModel, healthDataManager: healthDataManager)
                     .navigationBarTitle("Home")
             }.tabItem {
                 Image(systemName: "house")
@@ -28,7 +29,7 @@ struct ContentView: View {
                 Text("Graph")
             }
             NavigationView {
-                SettingsView()
+                SettingsView(viewModel: viewModel)
                     .navigationBarTitle("Settings")
             }.tabItem {
                 Image(systemName: "gear")
