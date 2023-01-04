@@ -9,7 +9,11 @@ import SwiftUI
 
 struct GraphView: View {
     var body: some View {
-        Text("Graph Screen")
+        VStack {
+            Text("Graph Screen")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("BackgroundGray"))
     }
 }
 

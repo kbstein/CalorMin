@@ -27,6 +27,7 @@ struct SettingsView: View {
             }
             .frame(width: (deviceWidth * 0.85), height: 15)
             .padding()
+            .background(Color.white)
             .cornerRadius(10.0)
             .onChange(of: viewModel.userSettings.caloriesRemaining) { value in
                 if value {
@@ -41,11 +42,14 @@ struct SettingsView: View {
                 Text("When enabled, home screen will show calories remaining instead of calories eaten")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .frame(width: (deviceWidth * 0.5))
                     .padding(.leading, (deviceWidth * 0.075))
+                    .padding(.trailing, (deviceWidth * 0.075))
                 Spacer()
             }
+            Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("BackgroundGray"))
     }
 }
 
