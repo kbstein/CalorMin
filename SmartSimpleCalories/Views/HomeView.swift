@@ -38,7 +38,9 @@ struct HomeView: View {
                     .fontWeight(.semibold)
                     .onAppear {
                         self.healthDataManager.fetchCalorieIntake { (result) in
-                            self.viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+                            DispatchQueue.main.async {
+                                viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+                            }
                         }
                     }
                 Button(action:  {
