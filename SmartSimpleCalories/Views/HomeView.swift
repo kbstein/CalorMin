@@ -38,18 +38,17 @@ struct HomeView: View {
                     .fontWeight(.semibold)
                     .onAppear {
                         self.healthDataManager.fetchCalorieIntake { (result) in
-                          self.calorieIntake = result
+                            self.viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
                         }
                     }
                 Button(action:  {
                     self.showDayHistoryView = true
                 }) {
-                    Text("\(Int(calorieIntake))")
+                    Text("\(viewModel.userSettings.calorieNumberBeingDisplayed)")
                         .foregroundColor(.black)
                         .font(.title)
                         .fontWeight(.bold)
                         .frame(width: (deviceWidth * 0.80), height: 75)
-                    
                         .background(Color.gray)
                         .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
                 }.sheet(isPresented: $showDayHistoryView) {
@@ -59,11 +58,11 @@ struct HomeView: View {
                 Text("Quick Add")
                     .font(.title2)
                     .fontWeight(.semibold)
-                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 500)
+                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 500, healthDataManager: healthDataManager)
                     .padding(.bottom, 5.0)
-                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 100)
+                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 100, healthDataManager: healthDataManager)
                     .padding(.bottom, 5.0)
-                quickAddButton(deviceWidth: deviceWidth, calorieAmount: 50)
+                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 50, healthDataManager: healthDataManager)
                 Spacer()
                 Button(action: {
                     self.showNumberKeyboard = true
@@ -110,12 +109,11 @@ struct HomeView: View {
                             self.showNumberKeyboard = false
                             healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
                             enteredCalories = ""
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                self.healthDataManager.fetchCalorieIntake { (result) in
-                                  self.calorieIntake = result
-                                }
-                            }
-                        }) { 
+                            self.healthDataManager.fetchCalorieIntake { (result) in
+                                DispatchQueue.main.async {
+                                    viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+                                }                            }
+                        }) {
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)
                                 .font(.title)
@@ -138,12 +136,19 @@ struct HomeView: View {
 }
 
 struct quickAddButton: View {
+    @ObservedObject var viewModel: UserSettingsViewModel
     var deviceWidth: CGFloat
     var calorieAmount: Int
-    
+    var healthDataManager: HealthDataManager
+
     var body: some View {
         Button {
-            
+            healthDataManager.saveCalorieIntake(calories: Double(calorieAmount))
+            self.healthDataManager.fetchCalorieIntake { (result) in
+                DispatchQueue.main.async {
+                    viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+                }
+            }
         } label: {
             Text("\(calorieAmount)")
                 .foregroundColor(.black)
