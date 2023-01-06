@@ -42,6 +42,7 @@ struct HomeView: View {
                                 viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                                 viewModel.save()
                             }
+                            calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
                         }
                     }
                 Button(action:  {
@@ -58,7 +59,7 @@ struct HomeView: View {
                             calorieIntake = value
                         }
                 }.sheet(isPresented: $showDayHistoryView) {
-                    DayHistoryView()
+                    DayHistoryView(viewModel: viewModel, healthDataManager: healthDataManager)
                 }
                 Spacer()
                 Text("Quick Add")
@@ -178,13 +179,6 @@ struct VisualEffectView: UIViewRepresentable {
     var effect: UIVisualEffect?
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }
     func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) { uiView.effect = effect }
-}
-
-struct DayHistoryView: View {
-    
-    var body: some View {
-        Text("Day History Screen")
-    }
 }
 
 

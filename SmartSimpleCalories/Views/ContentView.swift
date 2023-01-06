@@ -49,7 +49,7 @@ struct ContentView: View {
 class HealthDataManager {
     let healthStore = HKHealthStore()
     let userDefaults = UserDefaults.standard
-
+    
     func requestAuthorization() {
         if !userDefaults.bool(forKey: "healthDataAuthorized") {
             let allTypes = Set([HKObjectType.workoutType(),
@@ -116,15 +116,40 @@ class HealthDataManager {
     }
     
     func saveCalorieIntake(calories: Double) {
-      let calorieType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
-      let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: calories)
-      let now = Date()
-
-      let sample = HKQuantitySample(type: calorieType, quantity: caloriesQuantity, start: now, end: now)
-
-      healthStore.save(sample) { (success, error) in
-        // Handle success or error
-      }
+        let calorieType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+        let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: calories)
+        let now = Date()
+        
+        let sample = HKQuantitySample(type: calorieType, quantity: caloriesQuantity, start: now, end: now)
+        
+        healthStore.save(sample) { (success, error) in
+            // Handle success or error
+        }
+    }
+    
+    func fetchCalorieEntries(completion: @escaping ([HKQuantitySample]) -> Void) {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+        let calorieType = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+        let query = HKAnchoredObjectQuery(type: calorieType, predicate: predicate, anchor: nil, limit: HKObjectQueryNoLimit) { (query, samples, deletedObjects, newAnchor, error) in
+            guard let samples = samples as? [HKQuantitySample] else {
+                // Handle error
+                return
+            }
+            completion(samples)
+        }
+        healthStore.execute(query)
+    }
+    
+    func deleteCalorieEntry(entry: HKQuantitySample) {
+        healthStore.delete(entry) { (success, error) in
+            if !success {
+                // Handle error
+            }
+        }
     }
 }
 

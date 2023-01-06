@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import HealthKit
 
 class UserSettingsViewModel: ObservableObject {
     @Published var userSettings: UserSettings
+    @Published var calorieEntries: [HKQuantitySample] = []
 
     init() {
         // Try to retrieve the user's settings from UserDefaults
@@ -45,4 +47,9 @@ class UserSettingsViewModel: ObservableObject {
             self.userSettings.calorieNumberBeingDisplayed = numToDisplay
         }
     }
+    
+    func updateCalorieEntries(entries: [HKQuantitySample]) {
+        calorieEntries = entries
+    }
 }
+
