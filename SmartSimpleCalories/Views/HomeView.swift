@@ -101,7 +101,7 @@ struct HomeView: View {
                                 .cornerRadius(18.0)
                         }
                         TextField("0", text: self.$enteredCalories, onCommit: {
-                            self.numberOfCalories = Int(self.enteredCalories) ?? 0
+
                         })
                         .onAppear {
                             self.focusedField = .field
@@ -114,11 +114,15 @@ struct HomeView: View {
                         Button(action: {
                             self.showNumberKeyboard = false
                             DispatchQueue.main.async {
-                                healthDataManager.saveCalorieIntake(calories: Double(numberOfCalories))
-                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: numberOfCalories + viewModel.userSettings.calorieNumberBeingDisplayed)
-                                viewModel.save()
+                                healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    healthDataManager.fetchCalorieIntake { (result) in
+                                        viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                        viewModel.save()
+                                    }
+                                }
+                                enteredCalories = ""
                             }
-                            enteredCalories = ""
                         }) {
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)
