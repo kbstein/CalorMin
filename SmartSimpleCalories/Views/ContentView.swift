@@ -7,6 +7,7 @@
 
 import SwiftUI
 import HealthKit
+import Combine
 
 struct ContentView: View {
     let healthDataManager = HealthDataManager()
@@ -48,6 +49,7 @@ struct ContentView: View {
 class HealthDataManager {
     let healthStore = HKHealthStore()
     let userDefaults = UserDefaults.standard
+
     func requestAuthorization() {
         if !userDefaults.bool(forKey: "healthDataAuthorized") {
             let allTypes = Set([HKObjectType.workoutType(),
@@ -117,7 +119,9 @@ class HealthDataManager {
       let calorieType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
       let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: calories)
       let now = Date()
+
       let sample = HKQuantitySample(type: calorieType, quantity: caloriesQuantity, start: now, end: now)
+
       healthStore.save(sample) { (success, error) in
         // Handle success or error
       }

@@ -29,10 +29,20 @@ class UserSettingsViewModel: ObservableObject {
     }
     
     func toggleCalorieText() {
+        let newText: String
         if userSettings.calorieText == "Calories Eaten" {
-            userSettings.calorieText = "Calories Remaining"
+            newText = "Calories Remaining"
         } else {
-            userSettings.calorieText = "Calories Eaten"
+            newText = "Calories Eaten"
+        }
+        DispatchQueue.main.async {
+            self.userSettings.calorieText = newText
+        }
+    }
+    
+    func updateCalorieNumberBeingDisplayed(numToDisplay: Int) {
+        DispatchQueue.main.async {
+            self.userSettings.calorieNumberBeingDisplayed = numToDisplay
         }
     }
 }

@@ -22,14 +22,14 @@ struct HomeView: View {
     }
     @FocusState private var focusedField: FocusField?
     @State private var text: String = ""
-    @State var numberOfCalories = 2500
+    @State var numberOfCalories = 1
     @State private var showDayHistoryView: Bool = false
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
-    @State private var calorieIntake: Double = 0
+    @State private var calorieIntake: Int = 0
 
 
-
+    
     var body: some View {
         ZStack {
             VStack {
@@ -37,22 +37,26 @@ struct HomeView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
                     .onAppear {
-                        self.healthDataManager.fetchCalorieIntake { (result) in
-                            DispatchQueue.main.async {
-                                viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+                        DispatchQueue.main.async {
+                            self.healthDataManager.fetchCalorieIntake { (result) in
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                viewModel.save()
                             }
                         }
                     }
                 Button(action:  {
                     self.showDayHistoryView = true
                 }) {
-                    Text("\(viewModel.userSettings.calorieNumberBeingDisplayed)")
+                    Text("\(calorieIntake)")
                         .foregroundColor(.black)
                         .font(.title)
                         .fontWeight(.bold)
                         .frame(width: (deviceWidth * 0.80), height: 75)
                         .background(Color.gray)
                         .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                        .onChange(of: viewModel.userSettings.calorieNumberBeingDisplayed) { value in
+                            calorieIntake = value
+                        }
                 }.sheet(isPresented: $showDayHistoryView) {
                     DayHistoryView()
                 }
@@ -97,7 +101,7 @@ struct HomeView: View {
                                 .cornerRadius(18.0)
                         }
                         TextField("0", text: self.$enteredCalories, onCommit: {
-                            self.numberOfCalories += Int(self.enteredCalories) ?? 0
+                            self.numberOfCalories = Int(self.enteredCalories) ?? 0
                         })
                         .onAppear {
                             self.focusedField = .field
@@ -109,12 +113,12 @@ struct HomeView: View {
                         .fontWeight(.semibold)
                         Button(action: {
                             self.showNumberKeyboard = false
-                            healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
+                            DispatchQueue.main.async {
+                                healthDataManager.saveCalorieIntake(calories: Double(numberOfCalories))
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: numberOfCalories + viewModel.userSettings.calorieNumberBeingDisplayed)
+                                viewModel.save()
+                            }
                             enteredCalories = ""
-                            self.healthDataManager.fetchCalorieIntake { (result) in
-                                DispatchQueue.main.async {
-                                    viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
-                                }                            }
                         }) {
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)
@@ -145,10 +149,13 @@ struct quickAddButton: View {
 
     var body: some View {
         Button {
-            healthDataManager.saveCalorieIntake(calories: Double(calorieAmount))
-            self.healthDataManager.fetchCalorieIntake { (result) in
-                DispatchQueue.main.async {
-                    viewModel.userSettings.calorieNumberBeingDisplayed = Int(result)
+            DispatchQueue.main.async {
+                healthDataManager.saveCalorieIntake(calories: Double(calorieAmount))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    healthDataManager.fetchCalorieIntake { (result) in
+                        viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                        viewModel.save()
+                    }
                 }
             }
         } label: {
