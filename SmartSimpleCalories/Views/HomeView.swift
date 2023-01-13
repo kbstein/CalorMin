@@ -50,7 +50,7 @@ struct HomeView: View {
                 }) {
                     Text("\(calorieIntake)")
                         .foregroundColor(.black)
-                        .font(.title)
+                        .font(.largeTitle)
                         .fontWeight(.bold)
                         .frame(width: (deviceWidth * 0.80), height: 75)
                         .background(Color.gray)
@@ -59,7 +59,7 @@ struct HomeView: View {
                             calorieIntake = value
                         }
                 }.sheet(isPresented: $showDayHistoryView) {
-                    DayHistoryView(viewModel: viewModel, healthDataManager: healthDataManager)
+                    DayHistoryView(viewModel: viewModel, healthDataManager: healthDataManager, calorieIntake: calorieIntake)
                 }
                 Spacer()
                 Text("Quick Add")
@@ -166,8 +166,8 @@ struct quickAddButton: View {
         } label: {
             Text("\(calorieAmount)")
                 .foregroundColor(.black)
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.title2)
+                .fontWeight(.semibold)
                 .frame(width: (deviceWidth * 0.80), height: 50)
                 .background(Color.gray)
                 .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)

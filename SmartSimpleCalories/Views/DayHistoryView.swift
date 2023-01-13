@@ -11,7 +11,9 @@ import HealthKit
 
 struct DayHistoryView: View {
     @ObservedObject var viewModel: UserSettingsViewModel
+    @State var calorieEntries: [HKQuantitySample] = []
     var healthDataManager: HealthDataManager
+    var calorieIntake: Int
     var deviceWidth: CGFloat {
         UIScreen.main.bounds.width
     }
@@ -23,11 +25,13 @@ struct DayHistoryView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("\(viewModel.userSettings.calorieNumberBeingDisplayed)")
+                Text("\(calorieIntake)")
                     .font(.title)
                     .onAppear {
-                        healthDataManager.fetchCalorieEntries { (entries) in
-                            self.viewModel.updateCalorieEntries(entries: entries)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            healthDataManager.fetchCalorieEntries { (entries) in
+                                self.viewModel.updateCalorieEntries(entries: entries)
+                            }
                         }
                     }
                     .fontWeight(.semibold)
@@ -37,9 +41,14 @@ struct DayHistoryView: View {
                 Spacer()
                     .frame(height: 10.0)
                 List {
-                    ForEach(viewModel.calorieEntries, id: \.self) { entry in
+                    ForEach(calorieEntries, id: \.self) { entry in
                         Text("\(Int(entry.quantity.doubleValue(for: HKUnit.kilocalorie()))) calories at \(entry.startDate, style: .time)")
-                    }//.onDelete(perform: deleteCalorieEntry)
+                    }.onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            calorieEntries = viewModel.calorieEntries
+                        }
+                    }
+                    //.onDelete(perform: deleteCalorieEntry)
                 }
             }
             .navigationBarTitle("Day History")
@@ -60,6 +69,6 @@ struct DayHistoryView: View {
 
 struct DayHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        DayHistoryView(viewModel: UserSettingsViewModel(), healthDataManager: HealthDataManager())
+        DayHistoryView(viewModel: UserSettingsViewModel(), healthDataManager: HealthDataManager(), calorieIntake: 100)
     }
 }
