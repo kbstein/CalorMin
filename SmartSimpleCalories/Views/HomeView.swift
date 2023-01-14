@@ -44,26 +44,21 @@ struct HomeView: View {
                         self.healthDataManager.fetchCalorieIntake { (result) in
                             viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                             viewModel.save()
+                            calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
                         }
                         self.healthDataManager.fetchCalorieEntries { (entries) in
                             viewModel.updateCalorieEntries(entries: entries)
                             viewModel.save()
-                            print(entries.count)
-                        }
-                    
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                            calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                             calorieEntries = viewModel.calorieEntries
                         }
                     }
                 Button(action:  {
                     self.healthDataManager.fetchCalorieEntries { (entries) in
                         viewModel.updateCalorieEntries(entries: entries)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        viewModel.save()
                         calorieEntries = viewModel.calorieEntries
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.025) {
                         self.showDayHistoryView = true
                     }
                 }) {
