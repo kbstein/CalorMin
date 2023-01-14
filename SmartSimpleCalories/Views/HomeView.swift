@@ -41,6 +41,18 @@ struct HomeView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
                     .onAppear {
+                        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                            self.healthDataManager.fetchCalorieIntake { (result) in
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                viewModel.save()
+                                calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
+                            }
+                            self.healthDataManager.fetchCalorieEntries { (entries) in
+                                viewModel.updateCalorieEntries(entries: entries)
+                                viewModel.save()
+                                calorieEntries = viewModel.calorieEntries
+                            }
+                        }
                         self.healthDataManager.fetchCalorieIntake { (result) in
                             viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                             viewModel.save()
