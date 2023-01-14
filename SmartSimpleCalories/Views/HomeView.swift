@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import HealthKitUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: UserSettingsViewModel
@@ -27,26 +29,43 @@ struct HomeView: View {
     @State private var showNumberKeyboard: Bool = false
     @State private var enteredCalories: String = ""
     @State private var calorieIntake: Int = 0
+    @State var calorieEntries: [HKQuantitySample] = []
+
 
 
     
     var body: some View {
         ZStack {
             VStack {
-                Text("\(viewModel.userSettings.calorieText)")
+                Text("\(viewModel.userSettings.calorieText) \(calorieEntries.count)")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .onAppear {
-                        DispatchQueue.main.async {
-                            self.healthDataManager.fetchCalorieIntake { (result) in
-                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
-                                viewModel.save()
-                            }
+                        self.healthDataManager.fetchCalorieIntake { (result) in
+                            viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                            viewModel.save()
+                        }
+                        self.healthDataManager.fetchCalorieEntries { (entries) in
+                            viewModel.updateCalorieEntries(entries: entries)
+                            viewModel.save()
+                            print(entries.count)
+                        }
+                    
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                             calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            calorieEntries = viewModel.calorieEntries
                         }
                     }
                 Button(action:  {
-                    self.showDayHistoryView = true
+                    self.healthDataManager.fetchCalorieEntries { (entries) in
+                        viewModel.updateCalorieEntries(entries: entries)
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        calorieEntries = viewModel.calorieEntries
+                        self.showDayHistoryView = true
+                    }
                 }) {
                     Text("\(calorieIntake)")
                         .foregroundColor(.black)
@@ -59,7 +78,7 @@ struct HomeView: View {
                             calorieIntake = value
                         }
                 }.sheet(isPresented: $showDayHistoryView) {
-                    DayHistoryView(viewModel: viewModel, healthDataManager: healthDataManager, calorieIntake: calorieIntake)
+                    DayHistoryView(viewModel: viewModel, calorieEntries: calorieEntries, healthDataManager: healthDataManager, calorieIntake: calorieIntake)
                 }
                 Spacer()
                 Text("Quick Add")

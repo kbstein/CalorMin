@@ -49,7 +49,9 @@ class UserSettingsViewModel: ObservableObject {
     }
     
     func updateCalorieEntries(entries: [HKQuantitySample]) {
-        calorieEntries = entries
+        DispatchQueue.main.async {
+            self.calorieEntries = entries
+        }
     }
 }
 

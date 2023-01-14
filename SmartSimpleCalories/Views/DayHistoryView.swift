@@ -11,7 +11,7 @@ import HealthKit
 
 struct DayHistoryView: View {
     @ObservedObject var viewModel: UserSettingsViewModel
-    @State var calorieEntries: [HKQuantitySample] = []
+    @State var calorieEntries: [HKQuantitySample]
     var healthDataManager: HealthDataManager
     var calorieIntake: Int
     var deviceWidth: CGFloat {
@@ -28,11 +28,7 @@ struct DayHistoryView: View {
                 Text("\(calorieIntake)")
                     .font(.title)
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            healthDataManager.fetchCalorieEntries { (entries) in
-                                self.viewModel.updateCalorieEntries(entries: entries)
-                            }
-                        }
+                        
                     }
                     .fontWeight(.semibold)
                 Text("\(Date(), style: .date)")
@@ -43,9 +39,8 @@ struct DayHistoryView: View {
                 List {
                     ForEach(calorieEntries, id: \.self) { entry in
                         Text("\(Int(entry.quantity.doubleValue(for: HKUnit.kilocalorie()))) calories at \(entry.startDate, style: .time)")
-                    }.onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            calorieEntries = viewModel.calorieEntries
+                        if calorieEntries.isEmpty {
+                            Text("No Entries")
                         }
                     }
                     //.onDelete(perform: deleteCalorieEntry)
@@ -69,6 +64,6 @@ struct DayHistoryView: View {
 
 struct DayHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        DayHistoryView(viewModel: UserSettingsViewModel(), healthDataManager: HealthDataManager(), calorieIntake: 100)
+        DayHistoryView(viewModel: UserSettingsViewModel(), calorieEntries: [], healthDataManager: HealthDataManager(), calorieIntake: 100)
     }
 }
