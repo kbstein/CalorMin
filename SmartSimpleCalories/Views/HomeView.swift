@@ -121,7 +121,7 @@ struct HomeView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.black)
-                                .background(Color.red)
+                                .background(Color.gray)
                                 .cornerRadius(18.0)
                         }
                         TextField("0", text: self.$enteredCalories)
@@ -151,7 +151,7 @@ struct HomeView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.black)
-                                .background(Color.green)
+                                .background(Color.gray)
                                 .cornerRadius(18.0)
                         }
                     }

@@ -30,13 +30,19 @@ struct SettingsView: View {
                 Button(action: {
                     self.showNumberKeyboard = true
                 }) {
-                    Text(calorieGoal)
-                        .frame(width: (deviceWidth * 0.85), height: 15)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10.0)
-                        .foregroundColor(.black)
-                        .font(.title3)
+                    HStack {
+                        Text(calorieGoal + " cals")
+                            .font(.title3)
+
+                        Spacer()
+                        Image(systemName: "chevron.forward")
+
+                    }
+                    .frame(width: (deviceWidth * 0.85), height: 15)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10.0)
+                    .foregroundColor(.black)
                 }
                 .onAppear {
                     calorieGoal = String(viewModel.userSettings.calorieGoal)
@@ -44,8 +50,7 @@ struct SettingsView: View {
                 .onChange(of: viewModel.userSettings.calorieGoal, perform: { value in
                     calorieGoal = String(viewModel.userSettings.calorieGoal)
                 })
-                .background(Color.gray)
-                .cornerRadius(18.0)
+                .cornerRadius(10.0)
                 .padding()
                 
                 Toggle(isOn: $viewModel.userSettings.caloriesRemaining) {
@@ -86,7 +91,7 @@ struct SettingsView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.black)
-                                .background(Color.red)
+                                .background(Color.gray)
                                 .cornerRadius(18.0)
                         }
                         TextField("0", text: self.$calorieGoal)
@@ -94,7 +99,7 @@ struct SettingsView: View {
                             self.focusedField = .field
                         }
                         .focused($focusedField, equals: .field)
-                        .multilineTextAlignment(.leading)
+                        .multilineTextAlignment(.center)
                         .keyboardType(.numberPad)
                         .font(.title)
                         .fontWeight(.semibold)
@@ -109,7 +114,7 @@ struct SettingsView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.black)
-                                .background(Color.green)
+                                .background(Color.gray)
                                 .cornerRadius(18.0)
                         }
                     }
