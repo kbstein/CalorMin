@@ -13,7 +13,6 @@ struct ContentView: View {
     let healthDataManager = HealthDataManager()
     var viewModel = UserSettingsViewModel()
 
-
     var body: some View {
         TabView {
             NavigationView {
@@ -31,7 +30,7 @@ struct ContentView: View {
                 Text("Graph")
             }
             NavigationView {
-                SettingsView(viewModel: viewModel)
+                SettingsView(viewModel: viewModel, healthDataManager: healthDataManager)
                     .navigationBarTitle("Settings")
             }.tabItem {
                 Image(systemName: "gear")

@@ -30,14 +30,11 @@ struct HomeView: View {
     @State private var enteredCalories: String = ""
     @State private var calorieIntake: Int = 0
     @State var calorieEntries: [HKQuantitySample] = []
-
-
-
     
     var body: some View {
         ZStack {
             VStack {
-                Text("\(viewModel.userSettings.calorieText) \(calorieEntries.count)")
+                Text("\(viewModel.userSettings.calorieText)")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .onAppear {
@@ -127,9 +124,7 @@ struct HomeView: View {
                                 .background(Color.red)
                                 .cornerRadius(18.0)
                         }
-                        TextField("0", text: self.$enteredCalories, onCommit: {
-
-                        })
+                        TextField("0", text: self.$enteredCalories)
                         .onAppear {
                             self.focusedField = .field
                         }
@@ -165,7 +160,6 @@ struct HomeView: View {
                 .background(Color.white)
                 .cornerRadius(18.0)
             }
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("BackgroundGray"))
@@ -203,7 +197,9 @@ struct quickAddButton: View {
 
 struct VisualEffectView: UIViewRepresentable {
     var effect: UIVisualEffect?
+    
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }
+    
     func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) { uiView.effect = effect }
 }
 

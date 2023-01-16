@@ -53,5 +53,11 @@ class UserSettingsViewModel: ObservableObject {
             self.calorieEntries = entries
         }
     }
+    
+    func updateCalorieGoal(newGoal: Int) {
+        DispatchQueue.main.async {
+            self.userSettings.calorieGoal = newGoal
+        }
+    }
 }
 
