@@ -135,16 +135,14 @@ struct HomeView: View {
                         .fontWeight(.semibold)
                         Button(action: {
                             self.showNumberKeyboard = false
-                            DispatchQueue.main.async {
-                                healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                                    healthDataManager.fetchCalorieIntake { (result) in
-                                        viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
-                                        viewModel.save()
-                                    }
+                            healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                healthDataManager.fetchCalorieIntake { (result) in
+                                    viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                    viewModel.save()
                                 }
-                                enteredCalories = ""
                             }
+                            enteredCalories = ""
                         }) {
                             Image(systemName: "checkmark.square")
                                 .frame(width: 50, height: 50)

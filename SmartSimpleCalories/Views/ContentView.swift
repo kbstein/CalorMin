@@ -12,6 +12,8 @@ import Combine
 struct ContentView: View {
     let healthDataManager = HealthDataManager()
     var viewModel = UserSettingsViewModel()
+    @State var date = Date()
+    @State var calendar = Calendar.current
 
     var body: some View {
         TabView {
@@ -23,7 +25,7 @@ struct ContentView: View {
                 Text("Home")
             }
             NavigationView {
-                GraphView()
+                GraphView(dayOfWeek: calendar.component(.weekday, from: date))
                     .navigationBarTitle("Graph")
             }.tabItem {
                 Image(systemName: "chart.bar")
@@ -35,6 +37,10 @@ struct ContentView: View {
             }.tabItem {
                 Image(systemName: "gear")
                 Text("Settings")
+            }
+            .onAppear {
+                date = Date()
+                calendar = Calendar.current
             }
         }.onAppear(perform: requestAuthorization)
     }
