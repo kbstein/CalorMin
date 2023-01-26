@@ -61,6 +61,7 @@ struct HomeView: View {
                             calorieEntries = viewModel.calorieEntries
                         }
                     }
+
                 Button(action:  {
                     self.healthDataManager.fetchCalorieEntries { (entries) in
                         viewModel.updateCalorieEntries(entries: entries)
@@ -71,16 +72,29 @@ struct HomeView: View {
                         self.showDayHistoryView = true
                     }
                 }) {
-                    Text("\(calorieIntake)")
-                        .foregroundColor(.black)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(width: (deviceWidth * 0.80), height: 75)
-                        .background(Color.gray)
-                        .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
-                        .onChange(of: viewModel.userSettings.calorieNumberBeingDisplayed) { value in
-                            calorieIntake = value
-                        }
+                    if viewModel.userSettings.caloriesRemaining {
+                        Text("\(viewModel.userSettings.calorieGoal - calorieIntake)")
+                            .foregroundColor(.black)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .frame(width: (deviceWidth * 0.80), height: 75)
+                            .background(Color.gray)
+                            .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                            .onChange(of: viewModel.userSettings.calorieNumberBeingDisplayed) { value in
+                                calorieIntake = value
+                            }
+                    } else {
+                        Text("\(calorieIntake)")
+                            .foregroundColor(.black)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .frame(width: (deviceWidth * 0.80), height: 75)
+                            .background(Color.gray)
+                            .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                            .onChange(of: viewModel.userSettings.calorieNumberBeingDisplayed) { value in
+                                calorieIntake = value
+                            }
+                    }
                 }.sheet(isPresented: $showDayHistoryView) {
                     DayHistoryView(viewModel: viewModel, calorieEntries: calorieEntries, healthDataManager: healthDataManager, calorieIntake: calorieIntake)
                 }
