@@ -39,7 +39,7 @@ struct HomeView: View {
                     .fontWeight(.semibold)
                     .onAppear {
                         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-                            self.healthDataManager.fetchCalorieIntake { (result) in
+                            self.healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
                                 viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                                 viewModel.save()
                                 calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
@@ -50,7 +50,7 @@ struct HomeView: View {
                                 calorieEntries = viewModel.calorieEntries
                             }
                         }
-                        self.healthDataManager.fetchCalorieIntake { (result) in
+                        self.healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
                             viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                             viewModel.save()
                             calorieIntake = viewModel.userSettings.calorieNumberBeingDisplayed
@@ -151,7 +151,7 @@ struct HomeView: View {
                             self.showNumberKeyboard = false
                             healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                                healthDataManager.fetchCalorieIntake { (result) in
+                                healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
                                     viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                                     viewModel.save()
                                 }
@@ -189,7 +189,7 @@ struct quickAddButton: View {
             DispatchQueue.main.async {
                 healthDataManager.saveCalorieIntake(calories: Double(calorieAmount))
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                    healthDataManager.fetchCalorieIntake { (result) in
+                    healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
                         viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
                         viewModel.save()
                     }

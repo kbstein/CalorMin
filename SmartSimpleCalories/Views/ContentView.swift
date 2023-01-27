@@ -25,7 +25,7 @@ struct ContentView: View {
                 Text("Home")
             }
             NavigationView {
-                GraphView(dayOfWeek: calendar.component(.weekday, from: date))
+                GraphView(healthDataManager: healthDataManager, dayOfWeek: calendar.component(.weekday, from: date))
                     .navigationBarTitle("Graph")
             }.tabItem {
                 Image(systemName: "chart.bar")
@@ -48,6 +48,8 @@ struct ContentView: View {
     func requestAuthorization() {
       healthDataManager.requestAuthorization()
     }
+    
+    
 }
 
 
@@ -69,10 +71,9 @@ class HealthDataManager {
         }
     }
     
-    func fetchCalorieIntake(completion: @escaping (Double) -> Void) {
+    func fetchCalorieIntake(day: Date, completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
+        let startOfDay = calendar.startOfDay(for: day)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
         let calorieType = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
@@ -85,6 +86,25 @@ class HealthDataManager {
         }
         healthStore.execute(query)
     }
+    
+    func fetchCalorieIntakeInt(day: Date) -> Int? {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: day)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+        let calorieType = HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+        var calorieIntake:Int?
+        let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (query, result, error) in
+            guard let result = result, let sum = result.sumQuantity() else {
+                // Handle error
+                return
+            }
+            calorieIntake = Int(sum.doubleValue(for: HKUnit.kilocalorie()))
+        }
+        healthStore.execute(query)
+        return calorieIntake
+    }
+
     
     func fetchActiveCalorieBurned(completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
@@ -118,6 +138,25 @@ class HealthDataManager {
             completion(sum.doubleValue(for: HKUnit.kilocalorie()))
         }
         healthStore.execute(query)
+    }
+    
+    func fetchBasalCalorieBurnedInt() -> Int? {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+        let calorieType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!
+        var basalCalories:Int?
+        let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (query, result, error) in
+            guard let result = result, let sum = result.sumQuantity() else {
+                // Handle error
+                return
+            }
+            basalCalories = Int(sum.doubleValue(for: HKUnit.kilocalorie()))
+        }
+        healthStore.execute(query)
+        return basalCalories
     }
     
     func saveCalorieIntake(calories: Double) {
@@ -157,6 +196,8 @@ class HealthDataManager {
         }
     }
 }
+
+
 
 
 
