@@ -105,7 +105,6 @@ class HealthDataManager {
         return calorieIntake
     }
 
-    
     func fetchActiveCalorieBurned(completion: @escaping (Double) -> Void) {
         let calendar = Calendar.current
         let now = Date()

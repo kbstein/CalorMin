@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GraphView: View {
+    @State var calorieCounts = [0, 0, 0, 0, 0, 0, 0]
     var healthDataManager: HealthDataManager
     var deviceHeight: CGFloat {
         UIScreen.main.bounds.height
@@ -18,11 +19,8 @@ struct GraphView: View {
     var body: some View {
         ZStack {
             VStack {
-                let calorieCounts = getDailyCalorieCount()
                 let daysToDisplay = shiftDaysOfTheWeek(currentDay: dayOfWeek)
-                Text("Daily Calories")
-                    .font(.title)
-                Text("Todays Count")
+                Text("Daily Average: \((calorieCounts.reduce(0, +)/calorieCounts.count))")
                     .font(.title2)
                     .padding()
                 Spacer()
@@ -31,8 +29,9 @@ struct GraphView: View {
                         VStack {
                             Spacer()
                             Rectangle()
-                            .fill(Color.red)
-                            .frame(width: 20, height: CGFloat(calorieCounts[6 - day]) * 0.05)
+                            .fill(Color.gray)
+                            .frame(width: 20, height: CGFloat(calorieCounts[6 - day]) * 0.065)
+                            .border(.black)
                             Text("\(daysToDisplay[day])")
                                 .frame(width: 40)
                         }
@@ -40,6 +39,9 @@ struct GraphView: View {
                 }
                 Spacer().frame(height: 10)
             }
+        }
+        .onAppear {
+            getDailyCalorieCount()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("BackgroundGray"))
@@ -53,38 +55,15 @@ struct GraphView: View {
         return shiftedDaysOfTheWeek
     }
     
-    func getDailyCalorieCount() -> [Int] {
+    func getDailyCalorieCount() {
         var currentDate = Date()
-        var dailyCalorieList = [Int]()
-        let group = DispatchGroup()
-        for _ in 1..<8 {
-            group.enter()
+        for i in 0..<7 {
             self.healthDataManager.fetchCalorieIntake(day: currentDate) { (result) in
-                dailyCalorieList.append(Int(result))
-                group.leave()
+                calorieCounts[i] = Int(result)
             }
             currentDate = currentDate.dayBefore
         }
-        group.wait()
-        return dailyCalorieList
     }
-
-    
-    //func getDailyCalorieCount() -> [Int] {
-    //    var currentDate = Date()
-    //    var dailyCalorieList = [Int]()
-    //    var currentNum = 0
-    //    for _ in 1..<9 {
-    //        dailyCalorieList.append(1)
-    //        self.healthDataManager.fetchCalorieIntake(day: currentDate) { (result) in
-    //            currentNum = Int(result)
-    //        }
-    //        dailyCalorieList.append(currentNum)
-    //        print("\(dailyCalorieList[0])")
-    //        currentDate = currentDate.dayBefore
-    //    }
-    //    return dailyCalorieList
-    //}
 }
 
 extension Date {
