@@ -8,19 +8,24 @@
 import SwiftUI
 
 struct GraphView: View {
-    @State var calorieCounts = [0, 0, 0, 0, 0, 0, 0]
+    @ObservedObject var viewModel: UserSettingsViewModel
     var healthDataManager: HealthDataManager
     var deviceHeight: CGFloat {
         UIScreen.main.bounds.height
     }
     var dayOfWeek: Int
     let daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    @State var calorieCounts = [0, 0, 0, 0, 0, 0, 0]
+    @State var graphMax = 5000
 
     var body: some View {
         ZStack {
             VStack {
                 let daysToDisplay = shiftDaysOfTheWeek(currentDay: dayOfWeek)
                 Text("Daily Average: \((calorieCounts.reduce(0, +)/calorieCounts.count))")
+                    .font(.title2)
+                    .padding()
+                Text("Daily Max: \((graphMax))")
                     .font(.title2)
                     .padding()
                 Spacer()
@@ -41,7 +46,8 @@ struct GraphView: View {
             }
         }
         .onAppear {
-            getDailyCalorieCount()
+            calorieCounts = viewModel.userSettings.calorieCounts
+            graphMax = viewModel.userSettings.calorieCounts.max() ?? 2000
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("BackgroundGray"))
@@ -54,41 +60,13 @@ struct GraphView: View {
         }
         return shiftedDaysOfTheWeek
     }
-    
-    func getDailyCalorieCount() {
-        var currentDate = Date()
-        for i in 0..<7 {
-            self.healthDataManager.fetchCalorieIntake(day: currentDate) { (result) in
-                calorieCounts[i] = Int(result)
-            }
-            currentDate = currentDate.dayBefore
-        }
-    }
 }
 
-extension Date {
-    static var yesterday: Date { return Date().dayBefore }
-    static var tomorrow:  Date { return Date().dayAfter }
-    var dayBefore: Date {
-        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
-    }
-    var dayAfter: Date {
-        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
-    }
-    var noon: Date {
-        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
-    }
-    var month: Int {
-        return Calendar.current.component(.month,  from: self)
-    }
-    var isLastDayOfMonth: Bool {
-        return dayAfter.month != month
-    }
-}
+
 
 struct GraphView_Previews: PreviewProvider {
     static var previews: some View {
-        GraphView(healthDataManager: HealthDataManager(), dayOfWeek: 5)
+        GraphView(viewModel: UserSettingsViewModel(), healthDataManager: HealthDataManager(), dayOfWeek: 5)
     }
 }
 

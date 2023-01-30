@@ -18,7 +18,7 @@ class UserSettingsViewModel: ObservableObject {
             self.userSettings = userSettings
         } else {
             // If the user's settings are not found in UserDefaults, create a new userSettings struct with default values
-            self.userSettings = UserSettings(id: UUID(), calorieText: "Calories Eaten", calorieGoal: 2000, caloriesRemaining: false, calorieNumberBeingDisplayed: 0)
+            self.userSettings = UserSettings(id: UUID(), calorieText: "Calories Eaten", calorieGoal: 2000, caloriesRemaining: false, calorieNumberBeingDisplayed: 0, calorieCounts: [0, 0, 0, 0, 0, 0, 0])
         }
     }
 
@@ -57,6 +57,12 @@ class UserSettingsViewModel: ObservableObject {
     func updateCalorieGoal(newGoal: Int) {
         DispatchQueue.main.async {
             self.userSettings.calorieGoal = newGoal
+        }
+    }
+    
+    func updateCalorieCounts(newCalorieCount: Int, Index: Int) {
+        DispatchQueue.main.async {
+            self.userSettings.calorieCounts[Index] = newCalorieCount
         }
     }
 }

@@ -25,7 +25,7 @@ struct ContentView: View {
                 Text("Home")
             }
             NavigationView {
-                GraphView(healthDataManager: healthDataManager, dayOfWeek: calendar.component(.weekday, from: date))
+                GraphView(viewModel: viewModel, healthDataManager: healthDataManager, dayOfWeek: calendar.component(.weekday, from: date))
                     .navigationBarTitle("Graph")
             }.tabItem {
                 Image(systemName: "chart.bar")
@@ -42,14 +42,46 @@ struct ContentView: View {
                 date = Date()
                 calendar = Calendar.current
             }
-        }.onAppear(perform: requestAuthorization)
+        }.onAppear {
+            requestAuthorization()
+            getDailyCalorieCount()
+        }
     }
     
     func requestAuthorization() {
       healthDataManager.requestAuthorization()
     }
     
-    
+    func getDailyCalorieCount() {
+        var currentDate = Date()
+        for i in 0..<7 {
+            self.healthDataManager.fetchCalorieIntake(day: currentDate) { (result) in
+                viewModel.updateCalorieCounts(newCalorieCount: Int(result), Index: i)
+            }
+            currentDate = currentDate.dayBefore
+        }
+    }
+}
+
+
+extension Date {
+    static var yesterday: Date { return Date().dayBefore }
+    static var tomorrow:  Date { return Date().dayAfter }
+    var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+    }
+    var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+    }
+    var month: Int {
+        return Calendar.current.component(.month,  from: self)
+    }
+    var isLastDayOfMonth: Bool {
+        return dayAfter.month != month
+    }
 }
 
 
