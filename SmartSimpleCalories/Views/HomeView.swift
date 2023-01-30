@@ -15,7 +15,6 @@ struct HomeView: View {
     var deviceWidth: CGFloat {
         UIScreen.main.bounds.width
     }
-
     var deviceHeight: CGFloat {
         UIScreen.main.bounds.height
     }

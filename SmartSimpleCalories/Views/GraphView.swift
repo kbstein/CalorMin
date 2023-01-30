@@ -13,6 +13,9 @@ struct GraphView: View {
     var deviceHeight: CGFloat {
         UIScreen.main.bounds.height
     }
+    var deviceWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
     var dayOfWeek: Int
     let daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     @State var calorieCounts = [0, 0, 0, 0, 0, 0, 0]
@@ -20,27 +23,51 @@ struct GraphView: View {
 
     var body: some View {
         ZStack {
+            let maxGraphHeight = deviceHeight * 0.4
+            //let graphLines = Int(round(Double(viewModel.userSettings.calorieCounts.max() ?? 2000) / 1000))
             VStack {
                 let daysToDisplay = shiftDaysOfTheWeek(currentDay: dayOfWeek)
                 Text("Daily Average: \((calorieCounts.reduce(0, +)/calorieCounts.count))")
                     .font(.title2)
-                    .padding()
-                Text("Daily Max: \((graphMax))")
+                    .padding(.all, 3)
+                Text("Max For Week: \((graphMax))")
                     .font(.title2)
-                    .padding()
                 Spacer()
-                HStack {
-                    ForEach(0..<7) { day in
-                        VStack {
-                            Spacer()
-                            Rectangle()
-                            .fill(Color.gray)
-                            .frame(width: 20, height: CGFloat(calorieCounts[6 - day]) * 0.065)
-                            .border(.black)
-                            Text("\(daysToDisplay[day])")
-                                .frame(width: 40)
+                ZStack {
+                    //VStack {
+                    //    ForEach(1..<graphLines) { line in
+                    //        HStack {
+                    //            Text("\(1000 * (graphLines - line))")
+                    //                .padding(.trailing, 1.0)
+                    //            Rectangle()
+                    //                .fill(Color.gray)
+                    //                .frame(height: 1)
+                    //            .border(.black)
+                    //        }
+                    //        Spacer()
+                    //    }
+                    //}
+
+                    Spacer()
+                        .frame(height: maxGraphHeight)
+                    HStack {
+                        ForEach(0..<7) { day in
+                            //if day == 0 {
+                            //    Spacer()
+                            //        .frame(width: 150 - (deviceWidth * 0.3))
+                            //}
+                            VStack {
+                                Spacer()
+                                Rectangle()
+                                    .fill(Color.gray)
+                                    .frame(width: 20, height: (CGFloat(calorieCounts[6 - day]) / CGFloat(graphMax)) * maxGraphHeight)
+                                    .border(.black)
+                                Text("\(daysToDisplay[day])")
+                                    .frame(width: 40, height: 10)
+                            }
                         }
                     }
+
                 }
                 Spacer().frame(height: 10)
             }
