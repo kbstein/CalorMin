@@ -35,6 +35,7 @@ struct SettingsView: View {
                             .font(.title3)
 
                         Spacer()
+                        Text("Goal")
                         Image(systemName: "chevron.forward")
 
                     }
