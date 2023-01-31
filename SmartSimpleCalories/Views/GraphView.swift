@@ -19,7 +19,7 @@ struct GraphView: View {
     var dayOfWeek: Int
     let daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     @State var calorieCounts = [0, 0, 0, 0, 0, 0, 0]
-    @State var graphMax = 5000
+    @State var graphMax = 1000
 
     var body: some View {
         ZStack {
@@ -74,7 +74,7 @@ struct GraphView: View {
         }
         .onAppear {
             calorieCounts = viewModel.userSettings.calorieCounts
-            graphMax = viewModel.userSettings.calorieCounts.max() ?? 2000
+            graphMax = viewModel.userSettings.calorieCounts.max() ?? 5000
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("BackgroundGray"))
