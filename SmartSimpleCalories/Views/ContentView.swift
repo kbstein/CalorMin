@@ -91,8 +91,7 @@ class HealthDataManager {
     
     func requestAuthorization() {
         if !userDefaults.bool(forKey: "healthDataAuthorized") {
-            let allTypes = Set([HKObjectType.workoutType(),
-                                HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!])
+            let allTypes = Set([HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!])
             healthStore.requestAuthorization(toShare: allTypes, read: allTypes) { [weak self] (success, error) in
                 guard success else {
                     // Handle error
@@ -154,41 +153,41 @@ class HealthDataManager {
         healthStore.execute(query)
     }
     
-    func fetchBasalCalorieBurned(completion: @escaping (Double) -> Void) {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
-        let calorieType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!
-        let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (query, result, error) in
-            guard let result = result, let sum = result.sumQuantity() else {
-                // Handle error
-                return
-            }
-            completion(sum.doubleValue(for: HKUnit.kilocalorie()))
-        }
-        healthStore.execute(query)
-    }
-    
-    func fetchBasalCalorieBurnedInt() -> Int? {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
-        let calorieType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!
-        var basalCalories:Int?
-        let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (query, result, error) in
-            guard let result = result, let sum = result.sumQuantity() else {
-                // Handle error
-                return
-            }
-            basalCalories = Int(sum.doubleValue(for: HKUnit.kilocalorie()))
-        }
-        healthStore.execute(query)
-        return basalCalories
-    }
+    //func fetchBasalCalorieBurned(completion: @escaping (Double) -> Void) {
+    //    let calendar = Calendar.current
+    //    let now = Date()
+    //    let startOfDay = calendar.startOfDay(for: now)
+    //    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+    //    let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+    //    let calorieType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!
+    //    let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: //.cumulativeSum) { (query, result, error) in
+    //        guard let result = result, let sum = result.sumQuantity() else {
+    //            // Handle error
+    //            return
+    //        }
+    //        completion(sum.doubleValue(for: HKUnit.kilocalorie()))
+    //    }
+    //    healthStore.execute(query)
+    //}
+    //
+    //func fetchBasalCalorieBurnedInt() -> Int? {
+    //    let calendar = Calendar.current
+    //    let now = Date()
+    //    let startOfDay = calendar.startOfDay(for: now)
+    //    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+    //    let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
+    //    let calorieType = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!
+    //    var basalCalories:Int?
+    //    let query = HKStatisticsQuery(quantityType: calorieType, quantitySamplePredicate: predicate, options: //.cumulativeSum) { (query, result, error) in
+    //        guard let result = result, let sum = result.sumQuantity() else {
+    //            // Handle error
+    //            return
+    //        }
+    //        basalCalories = Int(sum.doubleValue(for: HKUnit.kilocalorie()))
+    //    }
+    //    healthStore.execute(query)
+    //    return basalCalories
+    //}
     
     func saveCalorieIntake(calories: Double) {
         let calorieType = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
