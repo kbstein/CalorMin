@@ -62,7 +62,6 @@ struct GraphView: View {
                                     Rectangle()
                                         .fill(Color.gray)
                                         .frame(width: 20, height: (CGFloat(calorieCounts[6 - day]) / CGFloat(graphMax)) * maxGraphHeight)
-                                        .border(.black)
                                 }
                                 Text("\(daysToDisplay[day])")
                                     .frame(width: 40, height: 10)
