@@ -52,10 +52,6 @@ struct GraphView: View {
                         .frame(height: maxGraphHeight)
                     HStack {
                         ForEach(0..<7) { day in
-                            //if day == 0 {
-                            //    Spacer()
-                            //        .frame(width: 150 - (deviceWidth * 0.3))
-                            //}
                             VStack {
                                 Spacer()
                                 if graphMax > 0 {

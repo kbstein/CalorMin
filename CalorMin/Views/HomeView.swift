@@ -101,11 +101,71 @@ struct HomeView: View {
                 Text("Quick Add")
                     .font(.title2)
                     .fontWeight(.semibold)
-                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 500, healthDataManager: healthDataManager)
-                    .padding(.bottom, 5.0)
-                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 100, healthDataManager: healthDataManager)
-                    .padding(.bottom, 5.0)
-                quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 50, healthDataManager: healthDataManager)
+                Button {
+                    calorieIntake += 500
+                    DispatchQueue.main.async {
+                        healthDataManager.saveCalorieIntake(calories: Double(500))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                viewModel.save()
+                            }
+                        }
+                    }
+                } label: {
+                    Text("\(500)")
+                        .foregroundColor(.black)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(width: (deviceWidth * 0.80), height: 50)
+                        .background(Color.gray)
+                        .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                }
+                Button {
+                    calorieIntake += 100
+                    DispatchQueue.main.async {
+                        healthDataManager.saveCalorieIntake(calories: Double(100))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                viewModel.save()
+                            }
+                        }
+                    }
+                } label: {
+                    Text("\(100)")
+                        .foregroundColor(.black)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(width: (deviceWidth * 0.80), height: 50)
+                        .background(Color.gray)
+                        .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                }
+                Button {
+                    calorieIntake += 50
+                    DispatchQueue.main.async {
+                        healthDataManager.saveCalorieIntake(calories: Double(50))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            healthDataManager.fetchCalorieIntake(day: Date()) { (result) in
+                                viewModel.updateCalorieNumberBeingDisplayed(numToDisplay: Int(result))
+                                viewModel.save()
+                            }
+                        }
+                    }
+                } label: {
+                    Text("\(50)")
+                        .foregroundColor(.black)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(width: (deviceWidth * 0.80), height: 50)
+                        .background(Color.gray)
+                        .cornerRadius(/*@START_MENU_TOKEN@*/18.0/*@END_MENU_TOKEN@*/)
+                }
+                ///quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 500, healthDataManager: healthDataManager)
+                ///    .padding(.bottom, 5.0)
+                ///quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 100, healthDataManager: healthDataManager)
+                ///    .padding(.bottom, 5.0)
+                ///quickAddButton(viewModel: viewModel, deviceWidth: deviceWidth, calorieAmount: 50, healthDataManager: healthDataManager)
                 Spacer()
                 Button(action: {
                     self.showNumberKeyboard = true
@@ -147,6 +207,7 @@ struct HomeView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                         Button(action: {
+                            calorieIntake += Int(enteredCalories) ?? 0
                             self.showNumberKeyboard = false
                             healthDataManager.saveCalorieIntake(calories: Double(enteredCalories) ?? 0)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
